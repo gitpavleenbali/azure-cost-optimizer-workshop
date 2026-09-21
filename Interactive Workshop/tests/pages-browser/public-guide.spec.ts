@@ -8,6 +8,7 @@ test('public field guide is static, responsive and renders all architecture view
   page.on('response', response => { if (response.status() >= 400) failures.push(`${response.status()} ${response.url()}`); });
   await page.goto('./');
   await expect(page.getByText('Read-only public guide', { exact: true })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Open the live Azure Cost Optimizer Workshop' })).toHaveAttribute('href', 'https://aco-workshop-guide.blackwave-6513be11.eastus2.azurecontainerapps.io/');
   await expect(page.getByText('Facilitator', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Join workshop', { exact: true })).toHaveCount(0);
   if (info.project.name === 'mobile') await expect(page.getByRole('button', { name: 'Open navigation' })).toBeVisible();

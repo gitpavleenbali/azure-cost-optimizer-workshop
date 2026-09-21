@@ -2,7 +2,7 @@
 
 Build, run, deploy, and validate Azure Cost Optimizer in two 90-minute sprints.
 
-> **Interactive public field guide:** [Open the Azure Cost Optimizer Workshop](https://gitpavleenbali.github.io/azure-cost-optimizer-workshop/). The public guide is read-only. Your facilitator provides the separate secure tracker URL for saved progress, evidence uploads, workshop kudos, and facilitator-reviewed results. Join that tracker with your workshop name, invite code, and a private passphrase of at least 12 characters. Remember the passphrase: it is not displayed or recoverable by other participants. Never reuse an organizational password.
+> **Interactive workshop tracker:** [Open the live Azure Cost Optimizer Workshop](https://aco-workshop-guide.blackwave-6513be11.eastus2.azurecontainerapps.io/). This GitHub Pages guide is read-only; the tracker saves progress, evidence uploads, workshop kudos, and facilitator-reviewed results. Join with your workshop name, the invite code supplied privately by the facilitator, and a private passphrase of at least 12 characters. Remember the passphrase: it is not displayed or recoverable by other participants. Never reuse an organizational password.
 
 | Start here | Purpose |
 |---|---|
