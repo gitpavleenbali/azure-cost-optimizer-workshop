@@ -6,7 +6,10 @@ import {
   Check,
   ChevronRight,
   CircleAlert,
+  Copy,
   Download,
+  Eye,
+  EyeOff,
   Heart,
   ImagePlus,
   LockKeyhole,
@@ -554,6 +557,8 @@ export function Admin({
   useEffect(() => { if (actionError) reviewAlert.current?.scrollIntoView({ block: 'nearest' }); }, [actionError]);
   const [updated, setUpdated] = useState("");
   const [busy, setBusy] = useState(false);
+  const [inviteCode, setInviteCode] = useState<string | null>();
+  const [inviteVisible, setInviteVisible] = useState(false);
   const steps = guide.sections.filter((section) => section.step);
   const count = (person: Participant) =>
     steps.filter((step) =>
@@ -603,6 +608,25 @@ export function Admin({
       await load();
     } catch (caught) {
       setActionError(errorText(caught));
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function showInviteCode() {
+    if (inviteCode !== undefined) {
+      setInviteVisible(true);
+      return;
+    }
+    setBusy(true);
+    setError("");
+    try {
+      const result = await request<{ inviteCode: string | null }>(
+        "/admin/invite",
+      );
+      setInviteCode(result.inviteCode);
+      setInviteVisible(true);
+    } catch (caught) {
+      setError(errorText(caught));
     } finally {
       setBusy(false);
     }
@@ -666,6 +690,50 @@ export function Admin({
       <p className="lead">
         Participant-reported checkpoints and submitted evidence.
       </p>
+      <section className="invite-panel" aria-labelledby="invite-code-title">
+        <div>
+          <span className="eyebrow">Participant access</span>
+          <h2 id="invite-code-title">Workshop invite code</h2>
+          <p>
+            Share this code privately with participants. Never post it in the
+            repository, public guide, chat, or screenshots.
+          </p>
+        </div>
+        <div className="invite-actions">
+          {inviteVisible && inviteCode && (
+            <code aria-label="Workshop invite code">{inviteCode}</code>
+          )}
+          {inviteVisible && inviteCode === null && (
+            <span className="muted">No invite code is configured.</span>
+          )}
+          <button
+            className="button secondary"
+            disabled={busy}
+            onClick={() =>
+              inviteVisible ? setInviteVisible(false) : void showInviteCode()
+            }
+          >
+            {inviteVisible ? <EyeOff size={17} /> : <Eye size={17} />}
+            {busy
+              ? "Loading…"
+              : inviteVisible
+                ? "Hide invite code"
+                : "Show invite code"}
+          </button>
+          {inviteVisible && inviteCode && (
+            <button
+              className="button primary"
+              onClick={async () => {
+                await navigator.clipboard.writeText(inviteCode);
+                notify("Invite code copied.");
+              }}
+            >
+              <Copy size={17} />
+              Copy invite code
+            </button>
+          )}
+        </div>
+      </section>
       <div className="metrics">
         <div>
           <Users />

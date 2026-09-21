@@ -9,6 +9,7 @@ const directory = fs.mkdtempSync(
 const service = createApp({
   dataDir: directory,
   origin: "http://127.0.0.1:4397",
+  inviteCode: "browser-invite-code-fixture",
 });
 const server = service.app.listen(4397, "127.0.0.1");
 for (const signal of ["SIGINT", "SIGTERM"])

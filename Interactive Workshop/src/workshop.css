@@ -1268,6 +1268,27 @@ td:first-child {
 .board-release-panel h2 { margin: 4px 0; font-size: 18px; }
 .board-release-panel p { margin: 0; color: var(--muted); }
 .board-release-panel .button { flex: 0 0 auto; }
+.invite-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin: 22px 0;
+  padding: 18px 20px;
+  border-left: 4px solid var(--blue);
+  background: color-mix(in srgb, var(--blue) 7%, var(--bg));
+}
+.invite-panel h2 { margin: 4px 0; font-size: 18px; }
+.invite-panel p { max-width: 58ch; margin: 0; color: var(--muted); }
+.invite-actions { display: flex; align-items: center; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
+.invite-actions code {
+  max-width: min(42ch, 100%);
+  padding: 10px 12px;
+  overflow-wrap: anywhere;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--ink);
+}
 .submission-current .toolbar {
   margin-top: 20px;
 }

@@ -2,7 +2,15 @@
 
 Build, run, deploy, and validate Azure Cost Optimizer in two 90-minute sprints.
 
-> **Interactive workshop tracker:** [Open the live Azure Cost Optimizer Workshop](https://aco-workshop-guide.blackwave-6513be11.eastus2.azurecontainerapps.io/). This GitHub Pages guide is read-only; the tracker saves progress, evidence uploads, workshop kudos, and facilitator-reviewed results. Join with your workshop name, the invite code supplied privately by the facilitator, and a private passphrase of at least 12 characters. Remember the passphrase: it is not displayed or recoverable by other participants. Never reuse an organizational password.
+> **Start with the workshop repository:** [Open Azure Cost Optimizer Workshop on GitHub](https://github.com/gitpavleenbali/azure-cost-optimizer-workshop), or clone it from a terminal:
+>
+> ```shell
+> git clone https://github.com/gitpavleenbali/azure-cost-optimizer-workshop.git
+> cd azure-cost-optimizer-workshop
+> code .
+> ```
+
+> **Interactive workshop tracker:** [Open the live Azure Cost Optimizer Workshop](https://aco-workshop-guide.blackwave-6513be11.eastus2.azurecontainerapps.io/). This GitHub Pages guide is read-only; the tracker saves progress, evidence uploads, workshop kudos, and facilitator-reviewed results. Join with your workshop name, the invite code supplied privately by the facilitator, and a private passphrase of at least 12 characters. Remember the passphrase: it is not displayed or recoverable by other participants. Never reuse an organizational password. Facilitators sign in at the tracker's `/facilitator` page and select **Show invite code**; the value is available only through the authenticated dashboard and must be shared privately.
 
 | Start here | Purpose |
 |---|---|
@@ -423,6 +431,18 @@ Use **ACO Workshop Builder** throughout the two sprints. Invoke Reviewer or Tune
 # Part 2: Hands-On Workshop
 
 **Now take action.** Everything above is the solution tour. Start here with your own workspace, subscription and approvals; the supplied product and design stay unchanged.
+
+## Get The Workshop Repository First
+
+Use the public [Azure Cost Optimizer Workshop repository](https://github.com/gitpavleenbali/azure-cost-optimizer-workshop) as the participant source. Either open GitHub and choose **Code > Download ZIP**, then extract it, or clone it in a terminal:
+
+```shell
+git clone https://github.com/gitpavleenbali/azure-cost-optimizer-workshop.git
+cd azure-cost-optimizer-workshop
+code .
+```
+
+Open the repository root in VS Code before selecting **ACO Workshop Builder**. Do not open its parent folder or create a blank project. The clone contains the application, workshop instructions, delivery scripts, infrastructure, tests, and agent configuration used in every following step.
 
 | Sprint | Monday time | Outcome |
 |---|---|---|

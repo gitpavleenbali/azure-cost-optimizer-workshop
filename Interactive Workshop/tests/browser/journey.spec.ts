@@ -44,6 +44,15 @@ test("all guide content and four diagrams render on both viewports", async ({
   await expect(
     page.getByRole("heading", { name: "Azure Cost Optimizer Workshop", exact: true }),
   ).toBeVisible();
+  await expect(
+    page.getByRole("link", { name: "Open Azure Cost Optimizer Workshop on GitHub" }),
+  ).toHaveAttribute(
+    "href",
+    "https://github.com/gitpavleenbali/azure-cost-optimizer-workshop",
+  );
+  await expect(page.locator(".prose").first()).toContainText(
+    "git clone https://github.com/gitpavleenbali/azure-cost-optimizer-workshop.git",
+  );
   await noOverflow(page);
   expect((await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()).violations).toEqual([]);
   await snapshot(page, "guide-" + info.project.name);
@@ -135,6 +144,9 @@ test("participant progress, screenshot review and kudos are real shared state", 
     .getByLabel("Choose a passphrase")
     .fill("participant-browser-fixture-password");
   await page
+    .getByLabel("Workshop invite code")
+    .fill("browser-invite-code-fixture");
+  await page
     .getByRole("dialog")
     .getByRole("button", { name: "Join workshop", exact: true })
     .click();
@@ -220,6 +232,13 @@ test("participant progress, screenshot review and kudos are real shared state", 
   await expect(
     adminPage.getByRole("heading", { name: "The room, at a glance" }),
   ).toBeVisible();
+  await adminPage.getByRole("button", { name: "Show invite code" }).click();
+  const inviteCode = adminPage.locator('code[aria-label="Workshop invite code"]');
+  await expect(inviteCode).toHaveText(
+    "browser-invite-code-fixture",
+  );
+  await adminPage.getByRole("button", { name: "Hide invite code" }).click();
+  await expect(inviteCode).toHaveCount(0);
   await adminPage
     .getByRole("button", { name: "Review " + name, exact: true })
     .click();

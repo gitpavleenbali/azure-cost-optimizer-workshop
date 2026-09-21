@@ -443,6 +443,9 @@ export function createApp(options = {}) {
     await writeAudit(released ? 'kudos-board-released' : 'kudos-board-closed', req.account.id);
     res.json(board);
   });
+  app.get('/api/admin/invite', requireAdmin, (_req, res) =>
+    res.json({ inviteCode: inviteCode || null }),
+  );
   app.get("/api/admin/participants", requireAdmin, async (_req, res) => {
     const rows = await store.participants();
     res.json({

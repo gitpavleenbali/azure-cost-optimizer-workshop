@@ -15,6 +15,7 @@ test("roles, isolated durable progress, CSRF, uploads and moderated consent wall
     dataDir,
     origin: "http://127.0.0.1:4310",
     allowTestHost: true,
+    inviteCode: "private-invite-code-fixture",
   });
   const server = service.app.listen(0, "127.0.0.1");
   await new Promise((resolve) => server.once("listening", resolve));
@@ -64,10 +65,12 @@ test("roles, isolated durable progress, CSRF, uploads and moderated consent wall
     const alice = await call("/api/register", "POST", {
       name: "Alice",
       password: "participant-password-one",
+      inviteCode: "private-invite-code-fixture",
     });
     const bob = await call("/api/register", "POST", {
       name: "Bob",
       password: "participant-password-two",
+      inviteCode: "private-invite-code-fixture",
     });
     assert.equal(alice.status, 201);
     assert.equal((await call('/api/register', 'POST', { name: 'Injected role', password: 'long-fixture-passphrase', role: 'admin' })).status, 400);
@@ -75,6 +78,15 @@ test("roles, isolated durable progress, CSRF, uploads and moderated consent wall
     assert.equal(
       (await call("/api/admin/participants", "GET", undefined, alice)).status,
       403,
+    );
+    assert.equal((await call("/api/admin/invite")).status, 403);
+    assert.equal(
+      (await call("/api/admin/invite", "GET", undefined, alice)).status,
+      403,
+    );
+    assert.equal(
+      (await call("/api/admin/invite", "GET", undefined, admin)).inviteCode,
+      "private-invite-code-fixture",
     );
     const body = { status: "done", note: "", revision: content.revision };
     assert.equal(

@@ -41,7 +41,7 @@ npm start
 
 ## Facilitator Dashboard
 
-The protected dashboard shows the roster, 15-step maps, blockers, pending screenshot reviews and reported completions. It refreshes every 15 seconds and has search, status filters, CSV export, participant notes, screenshot approval/change requests and participant passphrase reset.
+The protected dashboard shows the roster, 15-step maps, blockers, pending screenshot reviews and reported completions. It refreshes every 15 seconds and has search, status filters, CSV export, participant notes, screenshot approval/change requests and participant passphrase reset. In hosted mode, sign in at `/facilitator` and select **Show invite code** to retrieve the configured participant code from the role-protected API. Use **Copy invite code** and share it only through an approved private channel; it is never embedded in the browser bundle or public guide.
 
 Screenshot approval means the facilitator reviewed what is visible. It does not certify hidden deployment state or security. Do not approve screenshots with sensitive billing/resource information. Uploaded metadata is stripped, but the app cannot automatically redact private text inside pixels.
 
@@ -67,7 +67,7 @@ GitHub Pages serves static files. It cannot run this Node API or a writable SQLi
 
 The hosted implementation uses Azure Table Storage for records and private Blob storage for screenshots, selected explicitly with `WORKSHOP_STORAGE=table`. See [HOSTING.md](HOSTING.md) for the intended stack and remaining deployment boundary. There is no silent SQLite fallback in hosted mode. GitHub Pages contains a separate read-only field guide; it never receives account, progress, screenshot, moderation, session or facilitator code.
 
-**Deployment status:** The passphrase-authenticated demo tracker is deployed to Azure Container Apps with private Table/Blob persistence, managed identity, HTTPS-only ingress and an immutable image digest. Live health and authorization-boundary checks pass. One-time facilitator activation is still pending; participants cannot register until it completes. No local participant data was imported.
+**Deployment status:** The passphrase-authenticated demo tracker is deployed to Azure Container Apps with private Table/Blob persistence, managed identity, HTTPS-only ingress and an immutable image digest. Live health and authorization-boundary checks pass, and one-time facilitator activation is complete. No local participant data was imported.
 
 ## Hosting Settings
 
