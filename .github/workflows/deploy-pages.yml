@@ -1,0 +1,62 @@
+name: Deploy Public Workshop Guide
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'README.md'
+      - 'docs/assets/**'
+      - 'Interactive Workshop/**'
+      - '.github/workflows/deploy-pages.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: 'Interactive Workshop/package-lock.json'
+      - run: npm ci
+        working-directory: 'Interactive Workshop'
+      - run: npm test
+        working-directory: 'Interactive Workshop'
+      - run: npm run lint
+        working-directory: 'Interactive Workshop'
+      - run: npm run build:pages
+        working-directory: 'Interactive Workshop'
+      - run: node --test tests/pages-artifact.mjs
+        working-directory: 'Interactive Workshop'
+      - run: npx playwright install --with-deps chromium
+        working-directory: 'Interactive Workshop'
+      - run: npm run test:pages
+        working-directory: 'Interactive Workshop'
+      - uses: actions/configure-pages@v5
+        with:
+          enablement: true
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'Interactive Workshop/dist-pages'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

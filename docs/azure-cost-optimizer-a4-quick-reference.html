@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Azure Cost Optimizer - A4 Quick Reference</title>
+  <style>
+    @page { size: A4 portrait; margin: 0; }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 210mm; height: 297mm; }
+    body {
+      color: #172534;
+      background: #ffffff;
+      font-family: "Aptos", "Segoe UI Variable Text", sans-serif;
+      font-size: 8.15pt;
+      line-height: 1.28;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    main {
+      width: 210mm;
+      height: 297mm;
+      padding: 10mm 11mm 8mm;
+      overflow: hidden;
+      display: grid;
+      grid-template-rows: auto auto auto auto 1fr auto;
+      gap: 4mm;
+      border-top: 4mm solid #087e8b;
+    }
+    header {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: end;
+      gap: 8mm;
+      border-bottom: 0.35mm solid #b9c9d1;
+      padding-bottom: 3mm;
+    }
+    h1, h2, h3, p { margin: 0; }
+    h1 {
+      font-family: "Bahnschrift", "Aptos Display", sans-serif;
+      font-size: 24pt;
+      line-height: 1;
+      letter-spacing: 0;
+      color: #12364a;
+    }
+    .subtitle { margin-top: 1.7mm; color: #496475; font-size: 9.1pt; }
+    .badge {
+      color: #ffffff;
+      background: #12364a;
+      padding: 2.1mm 3mm;
+      font-family: "Bahnschrift", sans-serif;
+      font-size: 7.5pt;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .principle {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border: 0.35mm solid #b9c9d1;
+    }
+    .principle > div { padding: 3mm; min-height: 18mm; }
+    .principle > div + div { border-left: 0.35mm solid #b9c9d1; }
+    .eyebrow {
+      display: block;
+      margin-bottom: 1mm;
+      color: #087e8b;
+      font-family: "Bahnschrift", sans-serif;
+      font-size: 7pt;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+    .principle strong { color: #12364a; font-size: 8.7pt; }
+    .flow {
+      display: grid;
+      grid-template-columns: 1fr auto 1.12fr auto 1fr auto 1.1fr;
+      align-items: stretch;
+      gap: 1.5mm;
+    }
+    .flow-step {
+      padding: 2.6mm 2.2mm;
+      border-top: 1.1mm solid var(--accent);
+      background: #f3f7f8;
+      min-height: 21mm;
+    }
+    .flow-step strong { display: block; color: #12364a; font-size: 8.2pt; margin-bottom: 0.8mm; }
+    .arrow { align-self: center; color: #8196a1; font-size: 13pt; }
+    .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 4mm; }
+    .panel {
+      border-top: 1.2mm solid var(--accent);
+      background: #f6f8f9;
+      padding: 3.2mm;
+      break-inside: avoid;
+    }
+    h2 {
+      color: #12364a;
+      font-family: "Bahnschrift", sans-serif;
+      font-size: 11.5pt;
+      line-height: 1.05;
+      margin-bottom: 2mm;
+    }
+    h3 {
+      color: #365364;
+      font-size: 8pt;
+      text-transform: uppercase;
+      margin: 2.3mm 0 1mm;
+    }
+    ul { margin: 0; padding-left: 4.2mm; }
+    li { margin: 0 0 0.9mm; }
+    li:last-child { margin-bottom: 0; }
+    .steps { list-style: none; padding: 0; counter-reset: step; }
+    .steps li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 5.4mm 1fr;
+      gap: 1.4mm;
+      align-items: start;
+      margin-bottom: 1.1mm;
+    }
+    .steps li::before {
+      content: counter(step);
+      display: grid;
+      place-items: center;
+      width: 4.8mm;
+      height: 4.8mm;
+      background: var(--accent);
+      color: #ffffff;
+      font-family: "Bahnschrift", sans-serif;
+      font-size: 7pt;
+      font-weight: 700;
+    }
+    .compact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1mm 3mm; }
+    .callout {
+      border-left: 1.2mm solid #f59e0b;
+      background: #fff8e8;
+      padding: 2.3mm 2.6mm;
+      font-weight: 650;
+      color: #5c4510;
+    }
+    code {
+      font-family: "Cascadia Mono", monospace;
+      font-size: 7.1pt;
+      color: #075e69;
+    }
+    footer {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 6mm;
+      align-items: center;
+      border-top: 0.35mm solid #b9c9d1;
+      padding-top: 2.2mm;
+      color: #536b78;
+      font-size: 7pt;
+    }
+    .status { font-weight: 700; color: #12364a; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <div>
+        <h1>Azure Cost Optimizer</h1>
+        <p class="subtitle">Workshop quick reference | Evidence first, deterministic finance, human approval</p>
+      </div>
+      <div class="badge">A4 field guide</div>
+    </header>
+
+    <section class="principle" aria-label="Core responsibilities">
+      <div><span class="eyebrow">Azure evidence</span><strong>Supplies observed facts</strong><br>Cost Management, Advisor and Resource Graph, with scope, period, currency and freshness.</div>
+      <div><span class="eyebrow">Deterministic engine</span><strong>Owns financial truth</strong><br>Exact-decimal totals, eligibility, risk, evidence revisions and report parity.</div>
+      <div><span class="eyebrow">Agent ACO</span><strong>Explains authorized evidence</strong><br>The Foundry-hosted model never invents prices, approves actions or mutates Azure.</div>
+    </section>
+
+    <section class="flow" aria-label="Solution flow">
+      <div class="flow-step" style="--accent:#087e8b"><strong>1. Collect</strong>Approved Query, Details or Export plus Advisor and inventory.</div>
+      <div class="arrow">&#8594;</div>
+      <div class="flow-step" style="--accent:#f59e0b"><strong>2. Normalize</strong>Validate exact values; retain one authorized current revision.</div>
+      <div class="arrow">&#8594;</div>
+      <div class="flow-step" style="--accent:#7c3aed"><strong>3. Publish</strong>Hash-verify Blob JSON, then publish the Cosmos pointer.</div>
+      <div class="arrow">&#8594;</div>
+      <div class="flow-step" style="--accent:#0e7490"><strong>4. Use</strong>Dashboard, tools and reports read the snapshot; questions do not recollect.</div>
+    </section>
+
+    <div class="columns">
+      <section class="panel" style="--accent:#087e8b">
+        <h2>What the solution delivers</h2>
+        <ul>
+          <li>One explicitly selected Azure subscription; local or one Container App.</li>
+          <li>Eight typed, read-only tools for costs, breakdowns, Advisor, opportunities, health, evidence, reports and guidance.</li>
+          <li>Five checked answer sections: <strong>Answer, Evidence, Data health, Risks, Next action</strong>.</li>
+          <li>PDF, XLSX, CSV, JSON, HTML and FOCUS outputs from the same report revision.</li>
+          <li>Only <code>done.validated=true</code> marks a successful model-backed answer.</li>
+        </ul>
+        <h3>Snapshot behavior</h3>
+        <ul>
+          <li>Charts, tables and reports make zero provider or model collection calls.</li>
+          <li>Hosted state is normalized Blob content plus a Cosmos revision pointer.</li>
+          <li>The model receives minimized evidence, never credentials or raw billing rows.</li>
+        </ul>
+      </section>
+
+      <section class="panel" style="--accent:#f59e0b">
+        <h2>Financial truth and safety</h2>
+        <ul>
+          <li>Preserve billed/effective basis, currency, dates, exclusions and collection time.</li>
+          <li>Missing or incomplete evidence stays <strong>unknown</strong>, never zero.</li>
+          <li>Advisor savings are estimates and may overlap; they are not targets or realized savings.</li>
+          <li>Never paste passwords, keys, tokens or private identifiers into chat or screenshots.</li>
+          <li>Pass the subscription explicitly; never change the global Azure CLI default.</li>
+          <li>Use supplied Bicep in Incremental mode and deploy only an immutable image digest.</li>
+        </ul>
+        <h3>Mandatory approval stops</h3>
+        <p>Stop before every Azure read or write, role assignment, model deployment, paid inference, public-access change, deployment or deletion. A successful what-if is evidence, not approval.</p>
+      </section>
+    </div>
+
+    <div class="columns">
+      <section class="panel" style="--accent:#0e7490">
+        <h2>Sprint 1 | Connect locally</h2>
+        <ol class="steps" style="--accent:#0e7490">
+          <li><span><strong>Prepare:</strong> check tools; install nothing without approval.</span></li>
+          <li><span><strong>Sample:</strong> prove <code>OFFLINE SAMPLE</code> with zero Azure/model calls.</span></li>
+          <li><span><strong>Context:</strong> sign in privately and select subscription/tenant.</span></li>
+          <li><span><strong>Inputs:</strong> record region, names, owner, expiry and required tags.</span></li>
+          <li><span><strong>Access:</strong> review the bounded read-only check, then approve or defer.</span></li>
+          <li><span><strong>Live-local:</strong> start cost-only; one approved refresh, never at startup.</span></li>
+          <li><span><strong>Parity:</strong> compare identical scope, dates, ActualCost, billed basis, currency and time.</span></li>
+          <li><span><strong>Agent ACO:</strong> separately approve model connection and one inference, or record activation false/deferred.</span></li>
+        </ol>
+      </section>
+
+      <section class="panel" style="--accent:#7c3aed">
+        <h2>Sprint 2 | Deploy and validate</h2>
+        <ol class="steps" style="--accent:#7c3aed; counter-reset:step 8" start="9">
+          <li><span><strong>Resume:</strong> confirm scope, model, spend, owner, expiry and access.</span></li>
+          <li><span><strong>Foundation:</strong> review what-if; approve Apply separately.</span></li>
+          <li><span><strong>Model:</strong> reuse or deploy only after capacity, quota, cost and access review.</span></li>
+          <li><span><strong>Image:</strong> use ACR remote build; record <code>repository@sha256:...</code>.</span></li>
+          <li><span><strong>App:</strong> review application what-if, then deploy the supplied workflow.</span></li>
+          <li><span><strong>Smoke:</strong> verify health, access, evidence, views, Advisor, reports and responsive fit.</span></li>
+          <li><span><strong>Experience:</strong> approve one full review, generate PDF/XLSX and review a screenshot.</span></li>
+        </ol>
+      </section>
+    </div>
+
+    <div class="callout">Recovery rule: record 403, 429, policy, model, quota or propagation blockers precisely. Never hide a live blocker with sample data, self-grant access, spin retries or weaken security to finish the workshop.</div>
+
+    <footer>
+      <span><span class="status">Completion evidence:</span> local sample | authorized evidence | parity | model activation | foundation | hosted smoke | validated answer | report | screenshot | cleanup decision</span>
+      <span>Participant workshop, not production certification</span>
+    </footer>
+  </main>
+</body>
+</html>

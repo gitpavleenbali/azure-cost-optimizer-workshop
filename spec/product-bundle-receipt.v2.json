@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0.0",
+  "bundle_id": "azure-cost-optimizer-participant-workshop",
+  "version": "2.0.0",
+  "recorded_date": "2026-09-20",
+  "manifest": {
+    "path": "spec/product-bundle.v2.json",
+    "sha256": "79f19b5b77a895869d7a2ef55f309360c2b14b7782aa37ef1ca1369085aede2d"
+  },
+  "archive": {
+    "path": "templates/product/azure-cost-optimizer-workshop-2.0.0.zip",
+    "sha256": "567e7ca648d0a03ba43a5fa5283dbdd4397a25de465e4e0e9429505c46f1dd4b",
+    "bytes": 5318051,
+    "files": 205
+  },
+  "validation": {
+    "static_workshop_checks": "passed",
+    "backend_tests": "passed",
+    "frontend_dependency_audit": "passed",
+    "frontend_production_build": "passed",
+    "response_layer_browser_tests": "passed across desktop and mobile",
+    "bicep_files": "all supplied templates compiled",
+    "semantic_cache_principal_isolation": "passed",
+    "participant_sanitization": "passed",
+    "openapi_route_parity": "passed",
+    "fai_reference_resolution": "passed"
+  },
+  "limitations": [
+    "Participant Azure authorization, financial parity, model activation, deployment, screenshot review, and optional cleanup are participant-specific gates.",
+    "This receipt does not certify production security, compliance, private networking, HA, DR, or realized savings."
+  ]
+}

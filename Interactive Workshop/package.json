@@ -1,0 +1,53 @@
+{
+  "name": "aco-interactive-workshop",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server/index.mjs",
+    "start": "node server/index.mjs",
+    "build": "tsc -b && vite build",
+    "build:pages": "tsc -b && node scripts/build-pages.mjs",
+    "lint": "oxlint",
+    "test": "node --test tests/*.test.mjs",
+    "test:browser": "playwright test",
+    "test:pages": "playwright test --config playwright.pages.config.ts",
+    "preview": "node server/index.mjs"
+  },
+  "dependencies": {
+    "@azure/data-tables": "^13.3.2",
+    "@azure/identity": "^4.13.3",
+    "@azure/storage-blob": "^12.33.0",
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource-variable/manrope": "^5.3.0",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.7.0",
+    "helmet": "^8.3.0",
+    "lucide-react": "^1.45.0",
+    "mermaid": "11.17.2",
+    "mssql": "^12.7.2",
+    "multer": "2.3.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-markdown": "^10.1.0",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "sharp": "^0.35.4",
+    "unified": "^11.0.5",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "oxlint": "^1.81.0",
+    "prettier": "^4.0.0-alpha.13",
+    "typescript": "~6.0.2",
+    "vite": "^8.3.0",
+    "yaml": "^2.9.1"
+  }
+}

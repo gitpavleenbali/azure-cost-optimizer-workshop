@@ -1,0 +1,35 @@
+name: Validate Interactive Workshop
+
+on:
+  pull_request:
+    paths:
+      - 'Interactive Workshop/**'
+      - 'README.md'
+      - 'docs/assets/**'
+      - '.github/workflows/validate-interactive-workshop.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  companion:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: Interactive Workshop
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+          cache-dependency-path: 'Interactive Workshop/package-lock.json'
+      - run: npm ci
+      - run: npm test
+      - run: npm run lint
+      - run: npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:browser
+      - run: npm audit --omit=dev

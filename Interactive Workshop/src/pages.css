@@ -1,0 +1,13 @@
+.public-shell { min-height: 100vh; display: grid; grid-template-columns: 300px minmax(0, 1fr); background: var(--bg); }
+.public-sidebar { position: sticky; top: 0; height: 100vh; display: flex; flex-direction: column; background: var(--sidebar); border-right: 1px solid var(--line); z-index: 30; }
+.public-mode { display: flex; gap: 10px; margin: 0 19px 16px; padding: 14px; color: var(--green); background: var(--green-soft); border: 1px solid color-mix(in srgb, var(--green) 20%, var(--line)); border-radius: 6px; }
+.public-mode strong,.public-mode span { display: block; }.public-mode strong { font-size: 13px; }.public-mode span { margin-top: 3px; color: var(--ink); font-size: 10.5px; line-height: 1.45; }
+.public-nav { flex: 1; overflow-y: auto; padding: 0 12px 20px; }
+.public-nav button { width: 100%; display: grid; grid-template-columns: 28px 1fr; gap: 8px; padding: 10px; text-align: left; background: transparent; border-left: 2px solid transparent; border-radius: 4px; font-size: 12.5px; line-height: 1.4; }
+.public-nav button > span { color: var(--muted); font-family: "JetBrains Mono Variable",monospace; font-size: 10px; }
+.public-nav button:hover,.public-nav button.active { color: var(--green); background: var(--green-soft); border-left-color: var(--green); }
+.source-link { margin: 12px 20px 20px; color: var(--green); font-weight: 700; font-size: 12px; }
+.public-workspace { min-width: 0; }.public-topbar { height: 76px; display: flex; align-items: center; gap: 16px; padding: 0 34px; border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 20; background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(12px); }
+.public-topbar strong { display: block; font-size: 18px; }.public-topbar .eyebrow { font-size: 8px; }.public-topbar .workshop-pill { margin-left: auto; }.public-menu { display: none; }
+.public-workspace > main { height: calc(100vh - 76px); overflow-y: auto; }.public-workspace .page-content { max-width: 1000px; }
+@media(max-width:780px){.public-shell{grid-template-columns:1fr}.public-sidebar{position:fixed;left:0;transform:translateX(-100%);width:290px;transition:transform .2s}.public-sidebar.is-open{transform:none}.public-menu{display:inline-flex}.public-topbar{padding:0 16px}.public-topbar strong{font-size:15px}.public-topbar .workshop-pill{display:none}.public-workspace .page-content{padding:24px 20px}.public-nav button{font-size:13px}}

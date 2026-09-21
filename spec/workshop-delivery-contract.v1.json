@@ -1,0 +1,150 @@
+{
+  "schema_version": "1.0.0",
+  "contract_id": "aco-participant-workshop-v1",
+  "product_revision": "v99-participant",
+  "goal": "Guide a participant through two Monday 90-minute sprints: validate Azure Cost Optimizer locally from 11:30 AM to 1:00 PM, then deploy the supplied curated web experience, validate Agent ACO, generate a report, and review a screenshot from 1:45 PM to 3:15 PM. OpenAPI and MCP prompt agents are optional bonus work.",
+  "source_of_truth": {
+    "runtime": "spec/runtime-contract.v1.json",
+    "guide": "README.md",
+    "architecture": "README.md",
+    "api": "spec/openapi.v1.yaml",
+    "tools": "spec/tool-schemas.v1.json",
+    "fai": "spec/fai-manifest.json"
+  },
+  "schedule": {
+    "day": "Monday",
+    "timezone": "participant-local",
+    "sprint_1": { "start": "11:30", "end": "13:00", "minutes": 90, "outcome": "validated local product and authorized evidence or an exact blocker" },
+    "break": { "start": "13:00", "end": "13:45", "minutes": 45, "new_unattended_writes_allowed": false },
+    "sprint_2": { "start": "13:45", "end": "15:15", "minutes": 90, "outcome": "curated hosted web, validated Agent ACO answer, generated report, and screenshot evidence or one exact blocker" }
+  },
+  "interaction_model": {
+    "participant_interface": "natural-language prompts through ACO Workshop Builder",
+    "participant_shell_commands_required": false,
+    "builder_executes_supplied_operations": true,
+    "builder_must_preserve_checkpoints": true,
+    "step_execution": "One requested numbered README step per turn; kickoff authorizes preparation only. End the turn at each checkpoint and wait for the next numbered step request.",
+    "checkpoint_file": ".workshop/checkpoint.json",
+    "recommended_permissions": "Manual or Default Approvals; Allow all, Bypass Approvals and Autopilot off. Tool permissions do not grant Azure or spend approval.",
+    "raw_command_disclosure": "Only on explicit participant request, direct interactive necessity, or one exact blocked recovery path.",
+    "participant_direct_actions": ["credentials", "MFA", "device-code completion", "secret entry", "approval or denial", "portal financial comparison"],
+    "approval_card_fields": ["action", "subscription", "resource scope", "principal", "cost or paid inference", "risk", "cleanup boundary"],
+    "rule": "The Builder may execute an operation only when the delivery contract does not require approval or after matching explicit approval for that exact action and scope."
+  },
+  "tracks": [
+    { "id": "sample", "azure_writes": false, "provider_calls": 0, "model_calls": 0 },
+    { "id": "live-local", "azure_writes": false, "collection_requires_explicit_approval": true, "model_optional": true },
+    { "id": "hosted-web", "azure_writes": true, "requires_what_if": true, "model_optional": true },
+    { "id": "foundry-channels-bonus", "bonus": true, "azure_writes": true, "requires_hosted_web": true, "model_required": true }
+  ],
+  "required_questions": [
+    "track",
+    "subscription and tenant",
+    "authority level",
+    "region",
+    "prefix and resource group",
+    "cost source",
+    "provider and model lifecycle",
+    "organization policy tags",
+    "spend and inference bounds",
+    "expiry"
+  ],
+  "approval": {
+    "default_cloud_writes": false,
+    "separate_approval_required": ["Azure reads", "resource creation", "role assignment", "model deployment", "paid inference", "public anonymous demo", "deployment", "deletion"],
+    "not_approval": ["subscription ownership", "credentials present", "generic deploy request", "successful what-if", "tool permission", "saved checkpoint", "Autopilot", "acknowledgment of a completed step"]
+  },
+  "defaults": {
+    "profile": "sample",
+    "region": "eastus2",
+    "auth": "container-apps-easy-auth",
+    "provider": "none",
+    "cost_source": "query",
+    "scheduled_refresh_minutes": 0,
+    "mcp_enabled": false,
+    "public_anonymous_access": false
+  },
+  "security_control_tag": {
+    "optional": true,
+    "meaning": "Organization-specific policy metadata only",
+    "rule": "Never set a bypass or exception value unless the participant's subscription owner explicitly approves that exact value. The tag does not replace identity, authorization, TLS, or data protection."
+  },
+  "preparation": {
+    "script": "scripts/prepare-workshop.ps1",
+    "installs_automatically": false,
+    "checks": ["Git", "Visual Studio Code", "GitHub Copilot Chat", ".NET 10 SDK", "Node.js 24 and npm", "Azure CLI", "Bicep", "ACR remote build", "cached Azure sign-in", "producer bundle receipt or extracted participant tree validation"],
+    "participant_integrity": "The facilitator verifies the downloaded ZIP against its external receipt. An extracted participant tree has no producer-only manifest/receipt; structure validation is not archive authenticity verification.",
+    "bonus_checks": ["Foundry Toolkit"],
+    "remediation": "ACO Workshop Builder explains each missing item and obtains explicit approval before one organization-approved installation at a time."
+  },
+  "delivery_sequence": [
+    "preparation checker",
+    "local sample",
+    "subscription selection",
+    "naming and policy inputs",
+    "authorized live-local evidence",
+    "portal parity",
+    "optional model selection",
+    "local validation",
+    "foundation what-if and approval",
+    "foundation apply",
+    "model reuse or approved deployment",
+    "digest-pinned image build",
+    "application what-if and approval",
+    "application apply",
+    "hosted smoke",
+    "validated Agent ACO answer",
+    "PDF or XLSX report",
+    "participant screenshot review",
+    "optional OpenAPI and MCP bonus",
+    "optional cleanup decision"
+  ],
+  "acceptance": {
+    "guide": ["README is the only root Markdown guide", "separate solution tour and hands-on workshop", "Manual permissions and one numbered step per turn", "zero participant PowerShell blocks", "four architecture views: solution overview, shared platform, Azure deployment, data flow", "bordered sanitized product screenshots with service evidence/bar and resource-group evidence/pie", "prompt-led Sprint 1 and Sprint 2", "future Microsoft 365 channels clearly labeled unimplemented"],
+    "local": ["sample UI", "backend tests", "frontend build", "desktop/mobile response tests", "Bicep compile", "sanitization scan"],
+    "live": ["authorized scope", "fresh evidence", "source receipts", "portal parity or explicit pending state", "write refusal"],
+    "hosted": ["supplied Bicep", "immutable image", "reviewed what-if", "workshop access profile", "health and readiness", "curated frontend", "validated Agent ACO answer", "PDF or XLSX report", "screenshot review"],
+    "bonus_channels": ["OpenAPI prompt agent", "MCP prompt agent"]
+  },
+  "throttle_policy": {
+    "query_quota_scope": "tenant",
+    "query_processing_units": { "per_10_seconds": 12, "per_minute": 60, "per_hour": 600, "approximate_cost": "one QPU per month of data queried" },
+    "attempts_per_eligible_window": 1,
+    "automatic_retry": false,
+    "honour_retry_after": true,
+    "retry_after_headers": [
+      "Retry-After",
+      "x-ms-ratelimit-microsoft.costmanagement-qpu-retry-after",
+      "x-ms-ratelimit-microsoft.costmanagement-entity-retry-after",
+      "x-ms-ratelimit-microsoft.costmanagement-tenant-retry-after",
+      "x-ms-ratelimit-microsoft.costmanagement-clienttype-retry-after"
+    ],
+    "no_snapshot_outcome": "collection fails and the dashboard is blocked until the retry time",
+    "prior_snapshot_outcome": "previous validated evidence is returned unchanged and keeps its own status; the attempt is disclosed as cost_source_status deferred-throttled with failed_source, retry_at and one replaced throttled receipt",
+    "degraded_cached_meaning": "a non-throttle collection failure with a prior snapshot; marks summary and data health degraded",
+    "retry_circuit": "further provider calls for that scope and period are suppressed until retry_at passes",
+    "sample_substitution_on_throttle": false,
+    "facilitator_pre_warm": {
+      "recommended": true,
+      "scope": "one snapshot per live subscription",
+      "period": "mtd",
+      "durable_snapshot_hours": 24,
+      "snapshot_key": ["scope", "period", "cost source"],
+      "requires_explicit_approval": true
+    },
+    "session_guidance": [
+      "Prefer the This month window during the session.",
+      "Stagger refreshes; simultaneous refreshes in one tenant exhaust the 12 QPU per 10 seconds budget first.",
+      "Each period is collected and cached separately."
+    ]
+  },
+  "limitations": [
+    "Prompt instructions guide workshop pacing but are not a deterministic permission enforcement boundary.",
+    "Microsoft 365 Copilot and Teams publication requires a separate authenticated adapter or verified Foundry-agent publication path, tenant approval, supported UI mapping and cost review; it is not included in workshop completion.",
+    "Cost data can be delayed and current-period values can change.",
+    "Cost Management Query quotas are shared per tenant, so other activity in the same tenant can throttle a participant who has made no recent request.",
+    "Advisor savings are estimates and can overlap.",
+    "The workshop is not a production security, compliance, high-availability, or disaster-recovery certification.",
+    "Public network access is a workshop option; private networking is a separate architecture initiative."
+  ]
+}
