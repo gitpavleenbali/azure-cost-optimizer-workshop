@@ -67,7 +67,7 @@ GitHub Pages serves static files. It cannot run this Node API or a writable SQLi
 
 The hosted implementation uses Azure Table Storage for records and private Blob storage for screenshots, selected explicitly with `WORKSHOP_STORAGE=table`. See [HOSTING.md](HOSTING.md) for the intended stack and remaining deployment boundary. There is no silent SQLite fallback in hosted mode. GitHub Pages contains a separate read-only field guide; it never receives account, progress, screenshot, moderation, session or facilitator code.
 
-**Deployment status:** `rg-aco-workshop` contains identity, Log Analytics and a private Storage account. The Table/Blob adapter and private-network Bicep compile locally. The dynamic Container App is not deployed because its required Entra application update was not approved. No live participant data was imported. Existing partial resources are retained, not deleted automatically.
+**Deployment status:** The passphrase-authenticated demo tracker is deployed to Azure Container Apps with private Table/Blob persistence, managed identity, HTTPS-only ingress and an immutable image digest. Live health and authorization-boundary checks pass. One-time facilitator activation is still pending; participants cannot register until it completes. No local participant data was imported.
 
 ## Hosting Settings
 
@@ -83,10 +83,10 @@ The hosted implementation uses Azure Table Storage for records and private Blob 
 | `WORKSHOP_STORAGE` | Unset for SQLite; `table` for Azure Table and Blob with no local fallback; `azure` retains the legacy SQL adapter only |
 | `WORKSHOP_TABLE_ENDPOINT` / `WORKSHOP_TABLE_NAME` | Hosted Table endpoint and table name |
 | `WORKSHOP_BLOB_ENDPOINT` | Private screenshot account endpoint, accessed by identity |
-| `WORKSHOP_OWNER_OBJECT_ID` | Entra object ID permitted to perform one-time hosted facilitator setup |
+| `WORKSHOP_SETUP_CODE` | Random 32+ character one-time hosted facilitator bootstrap secret; never expose it in the public UI or source control |
 | `AZURE_CLIENT_ID` | Hosted user-assigned managed identity client ID, not a credential |
 
-Non-loopback startup requires the canonical HTTPS origin, secure cookies and an invite code. SQLite hosting also requires completed local facilitator setup. Hosted setup requires the configured Entra owner identity and permanently closes after the first facilitator is created. Managed identity protects Table/Blob access; workshop passphrases and server-side roles protect participant and facilitator functions. These checks do not by themselves provision or certify the hosted service.
+Non-loopback startup requires the canonical HTTPS origin, secure cookies and an invite code. SQLite hosting also requires completed local facilitator setup. Hosted setup requires the protected setup code, is relayed through the loopback-only owner helper and permanently closes after the first facilitator is created. Managed identity protects Table/Blob access; workshop passphrases and server-side roles protect participant and facilitator functions. These checks do not by themselves provision or certify the hosted service.
 
 ## Validation
 

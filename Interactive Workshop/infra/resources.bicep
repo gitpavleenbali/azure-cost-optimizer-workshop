@@ -1,5 +1,6 @@
 param location string
 param tags object
+param existingBlobRoleAssignmentName string = ''
 var suffix = uniqueString(resourceGroup().id)
 var registryName = 'acoworkshop${suffix}'
 var storageName = 'acowork${suffix}'
@@ -10,6 +11,9 @@ var infrastructureSubnetName = 'snet-container-apps'
 var privateEndpointSubnetName = 'snet-private-endpoints'
 var blobPrivateDnsZoneName = 'privatelink.blob.${az.environment().suffixes.storage}'
 var tablePrivateDnsZoneName = 'privatelink.table.${az.environment().suffixes.storage}'
+var blobDataContributorRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+var tableDataContributorRoleId = subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3')
+var identityResourceId = resourceId('Microsoft.ManagedIdentity/userAssignedIdentities', 'id-aco-workshop')
 
 module identity 'br/public:avm/res/managed-identity/user-assigned-identity:0.6.0' = {
   name: 'workshop-identity'
@@ -99,21 +103,21 @@ resource workshopTable 'Microsoft.Storage/storageAccounts/tableServices/tables@2
   properties: {}
 }
 resource blobRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(screenshots.id, 'id-aco-workshop', 'Storage Blob Data Contributor')
+  name: empty(existingBlobRoleAssignmentName) ? guid(screenshots.id, identityResourceId, blobDataContributorRoleId) : existingBlobRoleAssignmentName
   scope: screenshots
   properties: {
     principalId: identity.outputs.principalId
     principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', 'ba92f5b4-2d11-453d-a403-e96b0029c9fe')
+    roleDefinitionId: blobDataContributorRoleId
   }
 }
 resource tableRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(workshopTable.id, 'id-aco-workshop', 'Storage Table Data Contributor')
+  name: guid(workshopTable.id, identityResourceId, tableDataContributorRoleId)
   scope: workshopTable
   properties: {
     principalId: identity.outputs.principalId
     principalType: 'ServicePrincipal'
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3')
+    roleDefinitionId: tableDataContributorRoleId
   }
 }
 resource blobPrivateDnsZone 'Microsoft.Network/privateDnsZones@2024-06-01' = {

@@ -12,7 +12,7 @@ This deployment is separate from the Azure Cost Optimizer runtime and from the p
 - Managed identity: AcrPull plus data access scoped to the `workshop` table and `screenshots` container.
 - Log Analytics: 30-day retention, 1 GB/day ingestion quota. Quotas and credits are not a total spending cap.
 
-The group and application services target East US 2. The Container Apps environment uses a delegated VNet subnet. Blob and Table use private endpoints and private DNS; Storage public network access remains disabled. The Container App itself retains public HTTPS ingress protected by Entra Easy Auth, workshop sessions and server-side roles.
+The group and application services target East US 2. The Container Apps environment uses a delegated VNet subnet. Blob and Table use private endpoints and private DNS; Storage public network access remains disabled. The Container App exposes only the tracker join/sign-in surface over public HTTPS. Invite-code registration, passphrase sessions, exact-origin and CSRF checks, request limits and server-side roles protect progress, evidence, moderation and facilitator operations. Azure Cost Optimizer financial APIs are not exposed by this tracker.
 
 ## Provisioning Sequence
 
@@ -27,7 +27,7 @@ The group and application services target East US 2. The Container Apps environm
 
 ## Facilitator Ownership
 
-Hosted setup is allowed once and only when Easy Auth injects the configured facilitator's Entra object ID. Table Storage atomically enforces one facilitator. The owner enters the private workshop passphrase in the browser; it is never placed in source, deployment parameters, chat or terminal command text. Participant requests cannot choose an administrator role, and `/api/admin/*` remains role-protected even when its route is guessed.
+Hosted setup requires a random 32+ character bootstrap code stored only in ignored deployment state and a Container App secret. The loopback-only owner helper reads that code server-side; it never sends the code to the local browser. The owner enters the private workshop passphrase in the browser, and the helper relays it directly to the hosted setup endpoint without writing it to disk or terminal output. Table Storage atomically enforces one facilitator, after which setup permanently closes. Participant requests cannot choose an administrator role, and `/api/admin/*` remains role-protected even when its route is guessed.
 
 Participants can register only after that account exists, with the workshop invite code. Their role is always `participant`; request bodies cannot select administrator. Facilitator navigation is only visible to the signed-in administrator. The server authorization remains authoritative even when someone guesses `/facilitator` or `/api/admin/...`.
 
@@ -35,7 +35,7 @@ Participants can register only after that account exists, with the workshop invi
 
 Container restarts and image updates do not move or erase the Table and Blob resources. Blob soft-delete retention is seven days; deleted screenshots can remain recoverable during that window. Table entities use ETags and same-partition transactions for account, progress, moderation and board changes. Complete an export/restore exercise before claiming recovery readiness.
 
-Local SQLite remains supported when `WORKSHOP_STORAGE` is unset. Hosted mode explicitly requires `WORKSHOP_STORAGE=table`, Table and Blob endpoints, managed identity client ID, canonical HTTPS origin, secure cookies, owner object ID and invite code. There is no hosted fallback to ephemeral SQLite if Azure Storage is unavailable.
+Local SQLite remains supported when `WORKSHOP_STORAGE` is unset. Hosted mode explicitly requires `WORKSHOP_STORAGE=table`, Table and Blob endpoints, managed identity client ID, canonical HTTPS origin, secure cookies, setup code and invite code. There is no hosted fallback to ephemeral SQLite if Azure Storage is unavailable.
 
 ## GitHub Pages
 
@@ -43,6 +43,6 @@ Pages publishes a separate static artifact generated from the canonical README. 
 
 ## Current Evidence
 
-The resource group currently contains the managed identity, Log Analytics workspace and private Storage account. The Table/Blob runtime, VNet/private-endpoint foundation and Entra-protected application templates compile locally. The operator declined the required Entra app callback/credential update, so no Container Apps what-if/apply, ACR build, owner setup or live persistence test was performed. No participant data was imported. Partial resources are retained and may incur charges; cleanup needs an explicit decision.
+The resource group contains the managed identity, Log Analytics workspace, ACR, VNet-integrated Container Apps environment, private Blob/Table endpoints and the running tracker Container App. Foundation and application what-if reviews had no deletes; the application plan created only the app and disabled auth-config resource. The app uses an immutable ACR digest, one warm Consumption replica, HTTPS-only ingress and private Table/Blob persistence. Live shell, liveness, readiness and unauthorized progress/admin/image checks pass. No local participant data was imported.
 
-Local tests cover the async persistence contract, authorization boundaries, Entra-owner bootstrap, single-facilitator invariant, existing participant journeys, the static Pages boundary and accessibility. They do not prove live Table/Blob private-network or managed-identity configuration. Actual what-if, deployment outputs, image digest, hosted smoke and restart evidence remain pending. A resource-group creation or successful local build is not hosted readiness or production certification.
+Local tests cover the async persistence contract, authorization boundaries, protected one-time bootstrap, single-facilitator invariant, existing participant journeys, the static Pages boundary and accessibility. Live evidence now proves private Table/Blob readiness through managed identity and the public sign-in/join surface on desktop and mobile. Facilitator activation, participant registration, screenshot moderation and post-restart persistence remain pending until the owner enters a private passphrase through the loopback helper. This workshop demo is not production certification.

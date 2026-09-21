@@ -14,6 +14,6 @@ applyTo: "{src,infra,ops}/**/*.{cs,bicep,json,yaml,yml}"
 - Never automatically retry report-generation POST operations.
 - Use Bicep for hosted infrastructure and incremental deployment only.
 - Run Bicep build, Azure what-if, health smoke, and cleanup-boundary checks before deployment claims.
-- Public workshop ingress still requires TLS and Microsoft Entra authentication.
+- Public Azure Cost Optimizer financial endpoints require TLS and Microsoft Entra authentication. The separately approved demo tracker may expose only its join/sign-in surface over TLS and must retain invite-code registration, passphrase sessions, request limits, origin/CSRF checks, and server-side role authorization.
 - Keep private endpoints, WAF, zone redundancy, and enterprise policy as assessed extensions rather than baseline workshop dependencies.
 - Emit structured OpenTelemetry traces without cost rows, tokens, report contents, or full prompts.

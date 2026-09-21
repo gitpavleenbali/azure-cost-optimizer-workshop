@@ -50,6 +50,8 @@ export function createApp(options = {}) {
   const secure = options.secure ?? false;
   const inviteCode =
     options.inviteCode ?? process.env.WORKSHOP_INVITE_CODE ?? "";
+  const setupCode =
+    options.setupCode ?? process.env.WORKSHOP_SETUP_CODE ?? "";
   const ownerObjectId = String(options.ownerObjectId ?? "").trim().toLowerCase();
   const store = options.store ?? createSqliteStore(dataDir);
   const db = store.db;
@@ -62,6 +64,14 @@ export function createApp(options = {}) {
     options.hosted &&
     ownerObjectId.length > 0 &&
     req.get("x-ms-client-principal-id")?.trim().toLowerCase() === ownerObjectId;
+  const protectedSetup = (req) =>
+    options.hosted &&
+    setupCode.length >= 32 &&
+    typeof req.body?.setupCode === "string" &&
+    timingSafeEqual(
+      Buffer.from(hash(req.body.setupCode)),
+      Buffer.from(hash(setupCode)),
+    );
   const progressFor = (userId) => store.progress(userId, content.revision);
   const completed = async (userId) =>
     (await progressFor(userId)).filter(
@@ -191,14 +201,19 @@ export function createApp(options = {}) {
   app.post("/api/setup", authLimit, async (req, res) => {
     if (
       await adminExists() ||
-      (options.hosted ? !hostedOwner(req) : !loopback(req.socket.remoteAddress))
+      (options.hosted
+        ? !hostedOwner(req) && !protectedSetup(req)
+        : !loopback(req.socket.remoteAddress))
     )
       return res
         .status(403)
         .json({
           error: "Facilitator setup is unavailable for this identity.",
         });
-    const { name, password } = credentials.parse(req.body);
+    const { name, password } = credentials.parse({
+      name: req.body?.name,
+      password: req.body?.password,
+    });
     res
       .status(201)
       .json(await issueSession(res, await addAccount(name, password, "admin")));

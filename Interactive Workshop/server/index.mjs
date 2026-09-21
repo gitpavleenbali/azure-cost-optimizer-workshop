@@ -29,6 +29,7 @@ const service = createApp({
   trustProxy: process.env.WORKSHOP_TRUST_PROXY === "true",
   hosted: hosted && !localOwner,
   ownerObjectId: process.env.WORKSHOP_OWNER_OBJECT_ID,
+  setupCode: process.env.WORKSHOP_SETUP_CODE,
   store,
 });
 if (

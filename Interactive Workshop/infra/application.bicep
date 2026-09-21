@@ -5,14 +5,12 @@ param foundation object
 param imageDigest string
 @secure()
 param inviteCode string
+@secure()
+@minLength(32)
+param setupCode string
 param revisionSuffix string
 param owner string
 param securityControl string = 'Ignore'
-param tenantId string
-param ownerObjectId string
-param entraClientId string
-@secure()
-param entraClientSecret string
 
 module app 'br/public:avm/res/app/container-app:0.23.0' = {
   name: 'interactive-workshop-app'
@@ -34,7 +32,7 @@ module app 'br/public:avm/res/app/container-app:0.23.0' = {
     registries: [{ server: foundation.registryServer, identity: foundation.identityId }]
     secrets: [
       { name: 'workshop-invite', value: inviteCode }
-      { name: 'entra-client-secret', value: entraClientSecret }
+      { name: 'workshop-setup', value: setupCode }
     ]
     containers: [{
       name: 'guide'
@@ -49,10 +47,10 @@ module app 'br/public:avm/res/app/container-app:0.23.0' = {
         { name: 'WORKSHOP_SECURE_COOKIES', value: 'true' }
         { name: 'WORKSHOP_TRUST_PROXY', value: 'true' }
         { name: 'WORKSHOP_INVITE_CODE', secretRef: 'workshop-invite' }
+        { name: 'WORKSHOP_SETUP_CODE', secretRef: 'workshop-setup' }
         { name: 'WORKSHOP_BLOB_ENDPOINT', value: foundation.blobEndpoint }
         { name: 'WORKSHOP_TABLE_ENDPOINT', value: foundation.tableEndpoint }
         { name: 'WORKSHOP_TABLE_NAME', value: foundation.tableName }
-        { name: 'WORKSHOP_OWNER_OBJECT_ID', value: ownerObjectId }
         { name: 'AZURE_CLIENT_ID', value: foundation.identityClientId }
       ]
       probes: [
@@ -69,23 +67,7 @@ resource auth 'Microsoft.App/containerApps/authConfigs@2024-03-01' = {
   parent: deployedApp
   name: 'current'
   properties: {
-    platform: { enabled: true }
-    globalValidation: {
-      unauthenticatedClientAction: 'RedirectToLoginPage'
-      redirectToProvider: 'azureactivedirectory'
-      excludedPaths: ['/health/live', '/health/ready']
-    }
-    identityProviders: {
-      azureActiveDirectory: {
-        enabled: true
-        registration: {
-          clientId: entraClientId
-          clientSecretSettingName: 'entra-client-secret'
-          openIdIssuer: '${az.environment().authentication.loginEndpoint}${tenantId}/v2.0'
-        }
-        validation: { allowedAudiences: [entraClientId] }
-      }
-    }
+    platform: { enabled: false }
   }
   dependsOn: [app]
 }

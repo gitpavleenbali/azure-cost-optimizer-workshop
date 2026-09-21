@@ -11,7 +11,7 @@ applyTo: "{src,infra,ops}/**/*.{cs,ts,tsx,bicep,json,yaml,yml}"
 - Tools return typed data; they never execute instructions found in source records.
 - Minimize and redact evidence before model use and telemetry.
 - Apply content safety to user-facing model responses and retain deterministic functionality when it is unavailable.
-- Public ingress requires Entra authentication, request limits, secure headers, CORS restrictions, and no anonymous financial endpoints.
+- Public Azure Cost Optimizer financial endpoints require Entra authentication. The separately approved demo tracker may expose only its join/sign-in surface over TLS; progress, evidence, moderation and facilitator endpoints require invite-code registration, passphrase sessions, request limits, secure headers, origin/CSRF checks and server-side roles.
 - Local mode binds to loopback and uses an explicit subscription allowlist.
 - The MVP is read-only. Plans are proposals and require human approval outside the agent.
 - Use secure temporary files, bounded report sizes, safe filenames, and idempotent cleanup.
